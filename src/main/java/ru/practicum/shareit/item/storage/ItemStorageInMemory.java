@@ -1,7 +1,6 @@
 package ru.practicum.shareit.item.storage;
 
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.item.model.Item;
 
@@ -9,10 +8,9 @@ import java.util.Collection;
 import java.util.HashMap;
 
 @Repository
-@Slf4j
-@Data
+@RequiredArgsConstructor
 public class ItemStorageInMemory implements ItemStorage {
-    private long itemCount = 1;
+    private long itemCount = 1L;
     private final HashMap<Long, Item> items;
 
     @Override

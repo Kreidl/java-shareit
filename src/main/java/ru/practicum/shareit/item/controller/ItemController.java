@@ -3,7 +3,6 @@ package ru.practicum.shareit.item.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.model.dto.ItemCreateDto;
 import ru.practicum.shareit.item.model.dto.ItemDto;
@@ -15,7 +14,6 @@ import java.util.Collection;
 @RequiredArgsConstructor
 @RestController
 @Slf4j
-@Validated
 @RequestMapping("/items")
 public class ItemController {
     private final ItemService itemService;
