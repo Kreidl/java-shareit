@@ -14,7 +14,7 @@ import ru.practicum.shareit.user.model.User;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Component
 public class CommentMapper {
-    public static Comment mapToComment (CommentCreateDto commentCreateDto, User user, Item item) {
+    public static Comment mapToComment(CommentCreateDto commentCreateDto, User user, Item item) {
         log.debug("Начало конвертации объекта CommentCreateDto в объект класса Comment");
         Comment comment = new Comment();
         comment.setText(commentCreateDto.getText());
