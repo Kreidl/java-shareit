@@ -2,6 +2,7 @@ package ru.practicum.shareit.user.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.user.model.User;
@@ -9,7 +10,7 @@ import ru.practicum.shareit.user.model.dto.UserCreateDto;
 import ru.practicum.shareit.user.model.dto.UserDto;
 import ru.practicum.shareit.user.model.dto.UserUpdateDto;
 import ru.practicum.shareit.user.model.mapper.UserMapper;
-import ru.practicum.shareit.user.storage.UserStorage;
+import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.Collection;
 
@@ -19,13 +20,13 @@ import static ru.practicum.shareit.user.model.mapper.UserMapper.*;
 @RequiredArgsConstructor
 @Slf4j
 public class UserServiceImpl implements UserService {
-
-    private final UserStorage userStorage;
+    @Autowired
+    private final UserRepository userRepository;
 
     @Override
     public UserDto createUser(UserCreateDto userCreateDto) {
         log.trace("Начало создания пользователя {}", userCreateDto);
-        User user = userStorage.createUser(mapToUser(userCreateDto));
+        User user = userRepository.save(mapToUser(userCreateDto));
         log.info("Пользователь {} создан", user);
         return mapToUserDto(user);
     }
@@ -33,14 +34,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto updateUser(UserUpdateDto userUpdateDto, long userId) {
         log.trace("Начало обновления пользователя с id={}", userId);
-        User user = userStorage.getUserById(userId);
-        if (user == null) {
-            log.error("Пользователя с id={} не существует", userId);
-            throw new NotFoundException("Пользователя с id=" + userId + " не существует.");
-        }
-        User updatedUser = new User(userId, user.getName(), user.getEmail());
-        updatedUser = updateUserFields(updatedUser, userUpdateDto);
-        user = userStorage.updateUser(updatedUser);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователя с id=" + userId + " не существует."));
+        updateUserFields(user, userUpdateDto);
+        user = userRepository.save(user);
         log.info("Пользователь {} обновлён", user);
         return mapToUserDto(user);
     }
@@ -48,7 +45,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Collection<UserDto> getAllUsers() {
         log.trace("Начало получения списка всех пользователей");
-        return userStorage.getAllUsers().stream()
+        return userRepository.findAll().stream()
                 .map(UserMapper::mapToUserDto)
                 .toList();
     }
@@ -56,23 +53,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserById(long userId) {
         log.trace("Начало получения пользователя с id={}", userId);
-        User user = userStorage.getUserById(userId);
-        if (user == null) {
-            log.error("Пользователя с id={} не существует", userId);
-            throw new NotFoundException("Пользователя с id=" + userId + " не существует.");
-        }
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователя с id=" + userId + " не существует."));
         return mapToUserDto(user);
     }
 
     @Override
     public void deleteUserById(long userId) {
         log.trace("Начало удаления пользователя с id={}", userId);
-        User user = userStorage.getUserById(userId);
-        if (user == null) {
-            log.error("Пользователя с id={} не существует", userId);
-            throw new NotFoundException("Пользователя с id=" + userId + " не существует.");
-        }
-        userStorage.deleteUserById(userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователя с id=" + userId + " не существует."));
+        userRepository.deleteById(userId);
         log.info("Пользователь с id={} удалён", userId);
     }
 }
