@@ -14,11 +14,12 @@ import ru.practicum.shareit.user.model.User;
 public class ItemMapper {
     public static ItemDto mapToItemDto(Item item) {
         log.debug("Начало конвертации объекта Item в объект класса ItemDto.");
-        ItemDto itemDto = new ItemDto(item.getId(),
-                item.getName(),
-                item.getDescription(),
-                item.isAvailable(),
-                item.getOwner());
+        ItemDto itemDto = new ItemDto();
+        itemDto.setId(item.getId());
+        itemDto.setName(item.getName());
+        itemDto.setDescription(item.getDescription());
+        itemDto.setAvailable(item.isAvailable());
+        itemDto.setOwnerId(item.getOwner().getId());
         log.debug("Окончание конвертации объекта Item в объект класса ItemDto.");
         return itemDto;
     }

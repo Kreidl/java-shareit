@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.request.model.ItemRequest;
+//import ru.practicum.shareit.request.model.ItemRequest;
 
 @Data
 @NoArgsConstructor
@@ -22,5 +22,5 @@ public class ItemCreateDto {
 
     private long ownerId;
 
-    private ItemRequest request;
+//    private ItemRequest request;
 }
