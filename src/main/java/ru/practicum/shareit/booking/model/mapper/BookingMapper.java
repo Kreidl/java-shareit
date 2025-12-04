@@ -3,7 +3,6 @@ package ru.practicum.shareit.booking.model.mapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.dto.BookingCreateDto;
 import ru.practicum.shareit.booking.model.dto.BookingDto;
@@ -15,7 +14,6 @@ import static ru.practicum.shareit.user.model.mapper.UserMapper.mapToUserDto;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@Component
 public class BookingMapper {
     public static BookingDto mapToBookingDto(Booking booking) {
         log.debug("Начало конвертации объекта Booking в объект класса BookingDto");

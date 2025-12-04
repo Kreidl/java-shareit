@@ -30,5 +30,4 @@ public class Item {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
     private User owner; //владелец вещи
-//    private ItemRequest request; //если вещь была создана по запросу другого пользователя, то это ссылка на запрос
 }
