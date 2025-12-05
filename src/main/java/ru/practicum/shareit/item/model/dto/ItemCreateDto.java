@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.request.model.ItemRequest;
 
 @Data
 @NoArgsConstructor
@@ -21,6 +20,4 @@ public class ItemCreateDto {
     private Boolean available; //статус, доступна ли вещь для аренды
 
     private long ownerId;
-
-    private ItemRequest request;
 }
