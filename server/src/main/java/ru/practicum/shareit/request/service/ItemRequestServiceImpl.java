@@ -43,14 +43,12 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     }
 
     @Override
-    public ItemRequestDto getItemRequestById(long itemRequestId, long userId) {
-        log.trace("Начало получения просмотра запроса с id={} от пользователя с id={}", itemRequestId, userId);
-        userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Пользователя с id=" + userId + " не существует"));
+    public ItemRequestDto getItemRequestById(long itemRequestId) {
+        log.trace("Начало получения просмотра запроса с id={} от пользователя с id={}", itemRequestId);
         ItemRequest itemRequest = itemRequestRepository.findById(itemRequestId)
                 .orElseThrow(() -> new NotFoundException("Запроса с id=" + itemRequestId + " не существует"));
         ItemRequestDto itemRequestDto = getItemRequestDtoWithAnswers(itemRequest);
-        log.info("Просмотрен запрос {} пользователем с id={}", itemRequestDto, userId);
+        log.info("Просмотрен запрос {}", itemRequestDto);
         return itemRequestDto;
     }
 

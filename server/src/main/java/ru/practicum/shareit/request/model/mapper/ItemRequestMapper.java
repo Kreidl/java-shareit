@@ -30,7 +30,6 @@ public class ItemRequestMapper {
         log.debug("Начало конвертации объекта ItemRequestCreateDto в объект класса ItemRequest");
         ItemRequest itemRequest = new ItemRequest();
         itemRequest.setDescription(itemRequestCreateDto.getDescription());
-        itemRequest.setRequester(mapToUser(itemRequestCreateDto.getRequester()));
         itemRequest.setCreated(itemRequestCreateDto.getCreated());
         log.debug("Окончание конвертации объекта ItemRequestCreateDto в объект класса ItemRequest");
         return itemRequest;

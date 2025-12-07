@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.exceptions.AlreadyExistsException;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.model.dto.UserCreateDto;
@@ -19,21 +21,36 @@ import static ru.practicum.shareit.user.model.mapper.UserMapper.*;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
     @Autowired
     private final UserRepository userRepository;
 
     @Override
+    @Transactional
     public UserDto createUser(UserCreateDto userCreateDto) {
         log.trace("Начало создания пользователя {}", userCreateDto);
+        boolean hasEmail = userRepository.existsUserByEmail(userCreateDto.getEmail());
+        if (hasEmail) {
+            throw new AlreadyExistsException("Пользователь с таким email" + userCreateDto.getEmail() +
+                    " уже существует");
+        }
         User user = userRepository.save(mapToUser(userCreateDto));
         log.info("Пользователь {} создан", user);
         return mapToUserDto(user);
     }
 
     @Override
+    @Transactional
     public UserDto updateUser(UserUpdateDto userUpdateDto, long userId) {
         log.trace("Начало обновления пользователя с id={}", userId);
+        if (userUpdateDto.hasEmail()) {
+            boolean hasEmail = userRepository.existsUserByEmail(userUpdateDto.getEmail());
+            if (hasEmail) {
+                throw new AlreadyExistsException("Пользователь с таким email" + userUpdateDto.getEmail() +
+                        " уже существует");
+            }
+        }
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователя с id=" + userId + " не существует."));
         updateUserFields(user, userUpdateDto);
@@ -59,6 +76,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void deleteUserById(long userId) {
         log.trace("Начало удаления пользователя с id={}", userId);
         User user = userRepository.findById(userId)

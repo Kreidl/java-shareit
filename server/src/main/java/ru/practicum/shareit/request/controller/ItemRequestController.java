@@ -34,11 +34,10 @@ public class ItemRequestController {
     }
 
     @GetMapping("/{requestId}")
-    public ItemRequestDto getItemRequestById(@RequestHeader("X-Sharer-User-Id") long userId,
-                                             @PathVariable(name = "requestId") long requestId) {
+    public ItemRequestDto getItemRequestById(@PathVariable(name = "requestId") long requestId) {
         log.info("Получен запрос на получение просмотра запроса на предмет с id={} от пользователя с id={}",
-                requestId, userId);
-        return itemRequestService.getItemRequestById(requestId, userId);
+                requestId);
+        return itemRequestService.getItemRequestById(requestId);
     }
 
     @GetMapping("/all")
