@@ -1,4 +1,4 @@
-package ru.practicum.shareit.request.model.mapper;
+package ru.practicum.shareit.request.mapper;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -9,8 +9,7 @@ import ru.practicum.shareit.request.model.dto.ItemRequestAnswer;
 import ru.practicum.shareit.request.model.dto.ItemRequestCreateDto;
 import ru.practicum.shareit.request.model.dto.ItemRequestDto;
 
-import static ru.practicum.shareit.user.model.mapper.UserMapper.mapToUser;
-import static ru.practicum.shareit.user.model.mapper.UserMapper.mapToUserDto;
+import static ru.practicum.shareit.user.mapper.UserMapper.mapToUserDto;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

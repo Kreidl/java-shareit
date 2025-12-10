@@ -1,7 +1,6 @@
 package ru.practicum.shareit.item.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
@@ -18,11 +17,9 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotBlank(message = "Название предмета не может быть пустым.")
     @Column(length = 255)
     private String name;
 
-    @NotBlank(message = "Описание предмета не может быть пустым.")
     @Column(length = 2000)
     private String description;
 
