@@ -1,15 +1,17 @@
 package ru.practicum.shareit.booking.dto;
 
 import lombok.RequiredArgsConstructor;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.json.JsonContent;
-import ru.practicum.shareit.booking.BookingStatus;
-import ru.practicum.shareit.item.dto.ItemBookingDto;
-import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.booking.model.BookingStatus;
+import ru.practicum.shareit.booking.model.dto.BookingDto;
+import ru.practicum.shareit.item.model.dto.ItemBookingDto;
+import ru.practicum.shareit.user.model.dto.UserDto;
 
 import java.time.LocalDateTime;
 
@@ -53,11 +55,11 @@ class BookingDtoJsonTest {
                 "\"booker\": {\"id\": 1, \"name\": \"Имя\", \"email\": \"exs@mail.ru\"}, \"status\": \"WAITING\"}";
         BookingDto bookingDto1 = json.parse(jsonContent).getObject();
 
-        assertThat(bookingDto1.getId()).isEqualTo(bookingDto.getId());
-        assertThat(bookingDto1.getStart()).isEqualTo(bookingDto.getStart());
-        assertThat(bookingDto1.getEnd()).isEqualTo(bookingDto.getEnd());
-        assertThat(bookingDto1.getBooker().getId()).isEqualTo(bookingDto.getBooker().getId());
-        assertThat(bookingDto1.getItem().getId()).isEqualTo(bookingDto.getItem().getId());
-        assertThat(bookingDto1.getStatus()).isEqualTo(bookingDto.getStatus());
+        Assertions.assertThat(bookingDto1.getId()).isEqualTo(bookingDto.getId());
+        Assertions.assertThat(bookingDto1.getStart()).isEqualTo(bookingDto.getStart());
+        Assertions.assertThat(bookingDto1.getEnd()).isEqualTo(bookingDto.getEnd());
+        Assertions.assertThat(bookingDto1.getBooker().getId()).isEqualTo(bookingDto.getBooker().getId());
+        Assertions.assertThat(bookingDto1.getItem().getId()).isEqualTo(bookingDto.getItem().getId());
+        Assertions.assertThat(bookingDto1.getStatus()).isEqualTo(bookingDto.getStatus());
     }
 }

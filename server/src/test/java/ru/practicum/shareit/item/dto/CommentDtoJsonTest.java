@@ -1,12 +1,14 @@
 package ru.practicum.shareit.item.dto;
 
 import lombok.RequiredArgsConstructor;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.json.JsonContent;
+import ru.practicum.shareit.item.comment.dto.CommentDto;
 
 import java.time.LocalDateTime;
 
@@ -40,9 +42,9 @@ class CommentDtoJsonTest {
                 " \"created\": \"2025-01-01T10:00:00\"}";
         CommentDto commentDto1 = json.parse(jsonContent).getObject();
 
-        assertThat(commentDto1.getId()).isEqualTo(commentDto.getId());
-        assertThat(commentDto1.getText()).isEqualTo(commentDto.getText());
-        assertThat(commentDto1.getAuthorName()).isEqualTo(commentDto.getAuthorName());
-        assertThat(commentDto1.getCreated()).isEqualTo(commentDto.getCreated());
+        Assertions.assertThat(commentDto1.getId()).isEqualTo(commentDto.getId());
+        Assertions.assertThat(commentDto1.getText()).isEqualTo(commentDto.getText());
+        Assertions.assertThat(commentDto1.getAuthorName()).isEqualTo(commentDto.getAuthorName());
+        Assertions.assertThat(commentDto1.getCreated()).isEqualTo(commentDto.getCreated());
     }
 }

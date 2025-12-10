@@ -1,12 +1,14 @@
 package ru.practicum.shareit.item.dto;
 
 import lombok.RequiredArgsConstructor;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.json.JsonContent;
+import ru.practicum.shareit.item.model.dto.ItemBookingDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -36,8 +38,8 @@ class ItemBookingDtoJsonTest {
         String jsonContent = "{\"id\": 1, \"name\": \"Предмет\", \"ownerName\": \"Имя\"}";
         ItemBookingDto itemBookingDto1 = json.parse(jsonContent).getObject();
 
-        assertThat(itemBookingDto1.getId()).isEqualTo(itemBookingDto.getId());
-        assertThat(itemBookingDto1.getName()).isEqualTo(itemBookingDto.getName());
-        assertThat(itemBookingDto1.getOwnerName()).isEqualTo(itemBookingDto.getOwnerName());
+        Assertions.assertThat(itemBookingDto1.getId()).isEqualTo(itemBookingDto.getId());
+        Assertions.assertThat(itemBookingDto1.getName()).isEqualTo(itemBookingDto.getName());
+        Assertions.assertThat(itemBookingDto1.getOwnerName()).isEqualTo(itemBookingDto.getOwnerName());
     }
 }

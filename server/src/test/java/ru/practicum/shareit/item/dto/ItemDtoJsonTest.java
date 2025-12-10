@@ -1,12 +1,14 @@
 package ru.practicum.shareit.item.dto;
 
 import lombok.RequiredArgsConstructor;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.json.JsonContent;
+import ru.practicum.shareit.item.model.dto.ItemDto;
 
 import java.util.ArrayList;
 
@@ -46,14 +48,14 @@ class ItemDtoJsonTest {
                 "\"comments\": []}";
         ItemDto itemDto1 = json.parse(jsonContent).getObject();
 
-        assertThat(itemDto1.getId()).isEqualTo(itemDto.getId());
-        assertThat(itemDto1.getName()).isEqualTo(itemDto.getName());
-        assertThat(itemDto1.getDescription()).isEqualTo(itemDto.getDescription());
-        assertThat(itemDto1.isAvailable()).isEqualTo(itemDto.isAvailable());
-        assertThat(itemDto1.getOwnerId()).isEqualTo(itemDto.getOwnerId());
-        assertThat(itemDto1.getRequestId()).isEqualTo(itemDto.getRequestId());
-        assertThat(itemDto1.getNextBooking()).isEqualTo(itemDto.getNextBooking());
-        assertThat(itemDto1.getLastBooking()).isEqualTo(itemDto.getLastBooking());
-        assertThat(itemDto1.getComments()).isEqualTo(itemDto.getComments());
+        Assertions.assertThat(itemDto1.getId()).isEqualTo(itemDto.getId());
+        Assertions.assertThat(itemDto1.getName()).isEqualTo(itemDto.getName());
+        Assertions.assertThat(itemDto1.getDescription()).isEqualTo(itemDto.getDescription());
+        Assertions.assertThat(itemDto1.isAvailable()).isEqualTo(itemDto.isAvailable());
+        Assertions.assertThat(itemDto1.getOwnerId()).isEqualTo(itemDto.getOwnerId());
+        Assertions.assertThat(itemDto1.getRequestId()).isEqualTo(itemDto.getRequestId());
+        Assertions.assertThat(itemDto1.getNextBooking()).isEqualTo(itemDto.getNextBooking());
+        Assertions.assertThat(itemDto1.getLastBooking()).isEqualTo(itemDto.getLastBooking());
+        Assertions.assertThat(itemDto1.getComments()).isEqualTo(itemDto.getComments());
     }
 }
