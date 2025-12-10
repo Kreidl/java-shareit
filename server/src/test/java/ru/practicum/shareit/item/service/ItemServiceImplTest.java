@@ -252,7 +252,8 @@ class ItemServiceImplTest {
             setText("Комментарий");
             setAuthor(owner);
             setCreated(LocalDateTime.now());
-        }});
+        }
+        });
 
         CommentDto result = itemService.createComment(commentCreateDto, 1L, 1L);
 

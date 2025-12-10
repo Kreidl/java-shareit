@@ -66,7 +66,7 @@ class BookingControllerTest {
         bookingDto = new BookingDto(1L,
                 LocalDateTime.of(2050, 1, 1, 10, 0),
                 LocalDateTime.of(2050, 1, 1, 11, 0),
-                itemBookingDto , userDto , BookingStatus.WAITING);
+                itemBookingDto, userDto, BookingStatus.WAITING);
     }
 
     @Test
@@ -130,7 +130,7 @@ class BookingControllerTest {
     }
 
     @Test
-    void updateValidItemOwnerBookingSolutionToApproved() throws Exception{
+    void updateValidItemOwnerBookingSolutionToApproved() throws Exception {
         bookingDto.setStatus(BookingStatus.APPROVED);
         when(bookingService.itemOwnerBookingSolution(anyLong(), anyLong(), anyBoolean())).thenReturn(bookingDto);
 
