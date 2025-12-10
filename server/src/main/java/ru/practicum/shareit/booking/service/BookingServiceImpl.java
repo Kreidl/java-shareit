@@ -1,9 +1,8 @@
 package ru.practicum.shareit.booking.service;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.util.InternalException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.model.State;
@@ -11,9 +10,10 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.model.dto.BookingCreateDto;
 import ru.practicum.shareit.booking.model.dto.BookingDto;
-import ru.practicum.shareit.booking.model.mapper.BookingMapper;
+import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exceptions.BadRequestParamException;
+import ru.practicum.shareit.exceptions.InternalServerErrorException;
 import ru.practicum.shareit.exceptions.NotAvailableException;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.item.model.Item;
@@ -25,12 +25,13 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
-import static ru.practicum.shareit.booking.model.mapper.BookingMapper.mapToBooking;
-import static ru.practicum.shareit.booking.model.mapper.BookingMapper.mapToBookingDto;
+import static ru.practicum.shareit.booking.mapper.BookingMapper.mapToBooking;
+import static ru.practicum.shareit.booking.mapper.BookingMapper.mapToBookingDto;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class BookingServiceImpl implements BookingService {
     @Autowired
     private final BookingRepository bookingRepository;
@@ -49,7 +50,7 @@ public class BookingServiceImpl implements BookingService {
                 .orElseThrow(() -> new NotFoundException(("Предмета с id=" + bookingCreateDto.getItemId()
                         + " не существует")));
         if (!item.isAvailable()) {
-            throw new NotAvailableException("Предмет " + item + "не доступен для бронирования");
+            throw new NotAvailableException("Предмет " + item + "недоступен для бронирования");
         }
         if (!bookingCreateDto.isStartBeforeEnd()) {
             log.error("Дата начала бронирования не может быть после окончания бронирования");
@@ -63,6 +64,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @Transactional
     public BookingDto itemOwnerBookingSolution(long bookingId, long ownerId, Boolean approved) {
         log.trace("Начало обновления бронирования с id {}", bookingId);
         Booking booking = bookingRepository.findById(bookingId)
@@ -84,8 +86,9 @@ public class BookingServiceImpl implements BookingService {
         if (booking.getItem().getOwner().getId() == userId || booking.getBooker().getId() == userId) {
             log.info("Получены данные о бронировании {}", booking);
             return mapToBookingDto(booking);
+        } else {
+            throw new NotFoundException("Доступ к бронированию запрещён");
         }
-        return null;
     }
 
     @Override
@@ -123,7 +126,7 @@ public class BookingServiceImpl implements BookingService {
                         .toList();
             }
             default -> {
-                throw new InternalException("Ошибка сервера");
+                throw new InternalServerErrorException("Ошибка сервера");
             }
         }
         log.info("Получены данные обо всех бронированиях пользователя с id {} со статусом бронирования {} - {}",
@@ -166,7 +169,7 @@ public class BookingServiceImpl implements BookingService {
                         .toList();
             }
             default -> {
-                throw new InternalException("Ошибка сервера");
+                throw new InternalServerErrorException("Ошибка сервера");
             }
         }
         log.info("Получены данные обо всех бронированиях всех вещей пользователя с id {} со статусом бронирования {} - {}",

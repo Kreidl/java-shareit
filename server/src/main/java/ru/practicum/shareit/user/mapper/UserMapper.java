@@ -1,4 +1,4 @@
-package ru.practicum.shareit.user.model.mapper;
+package ru.practicum.shareit.user.mapper;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

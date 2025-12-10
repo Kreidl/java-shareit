@@ -35,7 +35,7 @@ public class ItemRequestController {
 
     @GetMapping("/{requestId}")
     public ItemRequestDto getItemRequestById(@PathVariable(name = "requestId") long requestId) {
-        log.info("Получен запрос на получение просмотра запроса на предмет с id={} от пользователя с id={}",
+        log.info("Получен запрос на получение просмотра запроса на предмет с id={}",
                 requestId);
         return itemRequestService.getItemRequestById(requestId);
     }

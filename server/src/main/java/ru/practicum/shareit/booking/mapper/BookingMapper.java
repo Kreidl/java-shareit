@@ -1,4 +1,4 @@
-package ru.practicum.shareit.booking.model.mapper;
+package ru.practicum.shareit.booking.mapper;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.dto.ItemBookingDto;
 import ru.practicum.shareit.user.model.User;
 
-import static ru.practicum.shareit.user.model.mapper.UserMapper.mapToUserDto;
+import static ru.practicum.shareit.user.mapper.UserMapper.mapToUserDto;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

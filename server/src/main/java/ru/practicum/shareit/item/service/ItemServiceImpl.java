@@ -2,7 +2,6 @@ package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.util.InternalException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,6 +9,7 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exceptions.BadRequestParamException;
+import ru.practicum.shareit.exceptions.InternalServerErrorException;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.item.comment.Comment;
 import ru.practicum.shareit.item.comment.dto.CommentCreateDto;
@@ -20,7 +20,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.dto.ItemCreateDto;
 import ru.practicum.shareit.item.model.dto.ItemDto;
 import ru.practicum.shareit.item.model.dto.ItemUpdateDto;
-import ru.practicum.shareit.item.model.mapper.ItemMapper;
+import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.request.repository.ItemRequestRepository;
 import ru.practicum.shareit.user.model.User;
@@ -33,11 +33,12 @@ import java.util.List;
 
 import static ru.practicum.shareit.item.comment.mapper.CommentMapper.mapToComment;
 import static ru.practicum.shareit.item.comment.mapper.CommentMapper.mapToCommentDto;
-import static ru.practicum.shareit.item.model.mapper.ItemMapper.*;
+import static ru.practicum.shareit.item.mapper.ItemMapper.*;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class ItemServiceImpl implements ItemService {
     @Autowired
     private final ItemRepository itemRepository;
@@ -88,7 +89,6 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public ItemDto getItemById(long itemId) {
         log.trace("Начало получения предмета с id={}", itemId);
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Предмета с id=" + itemId
@@ -103,7 +103,6 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Collection<ItemDto> getUserItems(long ownerId) {
         log.trace("Начало получения всех предметов пользователя с id={}", ownerId);
         User user = userRepository.findById(ownerId).orElseThrow(() -> new NotFoundException("Пользователя с id="
@@ -127,6 +126,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public void deleteItemById(long itemId, long ownerId) {
         log.trace("Начало удаления предмета с id={}", itemId);
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Предмета с id=" + itemId
@@ -164,7 +164,7 @@ public class ItemServiceImpl implements ItemService {
             log.info("Невозможно добавить комментарий, статус бронирования APPROVED");
             throw new BadRequestParamException("Невозможно добавить комментарий, статус бронирования APPROVED");
         } else {
-            throw new InternalException("Ошибка сервера при добавлении комментария");
+            throw new InternalServerErrorException("Ошибка сервера при добавлении комментария");
         }
     }
 }

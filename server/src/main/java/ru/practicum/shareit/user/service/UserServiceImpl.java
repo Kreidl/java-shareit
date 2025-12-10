@@ -11,12 +11,12 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.model.dto.UserCreateDto;
 import ru.practicum.shareit.user.model.dto.UserDto;
 import ru.practicum.shareit.user.model.dto.UserUpdateDto;
-import ru.practicum.shareit.user.model.mapper.UserMapper;
+import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.Collection;
 
-import static ru.practicum.shareit.user.model.mapper.UserMapper.*;
+import static ru.practicum.shareit.user.mapper.UserMapper.*;
 
 @Service
 @RequiredArgsConstructor

@@ -1,7 +1,5 @@
 package ru.practicum.shareit.booking.controller;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +21,7 @@ public class BookingController {
 
     @PostMapping
     public BookingDto createBooking(@RequestHeader("X-Sharer-User-Id") long bookerId,
-                                    @Valid @RequestBody BookingCreateDto bookingCreateDto) {
+                                    @RequestBody BookingCreateDto bookingCreateDto) {
         log.info("Получен запрос на добавление бронирования {} от пользователя с id {}", bookingCreateDto, bookerId);
         return bookingService.createBooking(bookingCreateDto, bookerId);
     }
@@ -31,7 +29,7 @@ public class BookingController {
     @PatchMapping("/{bookingId}")
     public BookingDto itemOwnerBookingSolution(@RequestHeader("X-Sharer-User-Id") long ownerId,
                                                @RequestParam(value = "approved") Boolean approved,
-                                               @PathVariable @Positive long bookingId) {
+                                               @PathVariable long bookingId) {
         log.info("Получен запрос на изменение статуса бронирования с id {} от пользователя с id {}",
                 bookingId, ownerId);
         return bookingService.itemOwnerBookingSolution(bookingId, ownerId, approved);
@@ -39,7 +37,7 @@ public class BookingController {
 
     @GetMapping("/{bookingId}")
     public BookingDto getBookingById(@RequestHeader("X-Sharer-User-Id") long userId,
-                                     @PathVariable @Positive long bookingId) {
+                                     @PathVariable long bookingId) {
         log.info("Получен запрос на получение данных о бронировании с id {} от пользователя с id {}",
                 bookingId, userId);
         return bookingService.getBookingById(bookingId, userId);

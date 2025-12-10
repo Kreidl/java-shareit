@@ -1,6 +1,5 @@
 package ru.practicum.shareit.item.controller;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ public class ItemController {
 
     @PostMapping
     public ItemDto createItem(@RequestHeader("X-Sharer-User-Id") long ownerId,
-                              @Valid @RequestBody ItemCreateDto itemCreateDto) {
+                              @RequestBody ItemCreateDto itemCreateDto) {
         log.info("Получен запрос на добавление предмета {}", itemCreateDto);
         return itemService.createItem(itemCreateDto, ownerId);
     }
@@ -32,7 +31,7 @@ public class ItemController {
     @PatchMapping("/{itemId}")
     public ItemDto updateItem(@RequestHeader("X-Sharer-User-Id") long ownerId,
                               @PathVariable Long itemId,
-                              @Valid @RequestBody ItemUpdateDto itemUpdateDto) {
+                              @RequestBody ItemUpdateDto itemUpdateDto) {
         log.info("Получен запрос на обновление данных предмета {}", itemUpdateDto);
         return itemService.updateItem(itemUpdateDto, itemId, ownerId);
     }
