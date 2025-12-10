@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
-import ru.practicum.shareit.exceptions.BadRequestParamException;
 import ru.practicum.shareit.exceptions.InternalServerErrorException;
+import ru.practicum.shareit.exceptions.NotAvailableException;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.item.comment.Comment;
 import ru.practicum.shareit.item.comment.dto.CommentCreateDto;
@@ -116,10 +116,6 @@ public class ItemServiceImpl implements ItemService {
     @Transactional(readOnly = true)
     public Collection<ItemDto> getSearchItems(String text) {
         log.trace("Начало получения всех предметов по строке={}", text);
-        if (text.isBlank()) {
-            log.warn("Передана пустая строка для поиска");
-            return new ArrayList<>();
-        }
         return itemRepository.findByText(text).stream()
                 .map(ItemMapper::mapToItemDto)
                 .toList();
@@ -135,7 +131,7 @@ public class ItemServiceImpl implements ItemService {
                 + ownerId + " не существует"));
         if (item.getOwner().getId() != user.getId()) {
             log.error("Удалить предмет может только его владелец");
-            throw new NotFoundException("Удалить предмет может только его владелец");
+            throw new NotAvailableException("Удалить предмет может только его владелец");
         }
         itemRepository.deleteById(itemId);
         log.info("Предмет с id={} удалён", itemId);
@@ -152,7 +148,7 @@ public class ItemServiceImpl implements ItemService {
         List<Booking> bookings = bookingRepository.getLastBookingByBookerIdAndItemId(userId, itemId, now);
         if (bookings.isEmpty()) {
             log.info("Пользователь с id {} не брал в аренду вещь с id {}", userId, itemId);
-            throw new BadRequestParamException("Пользователь с id=" + userId + " не брал в аренду предмет с id=" + itemId);
+            throw new NotAvailableException("Пользователь с id=" + userId + " не брал в аренду предмет с id=" + itemId);
         }
         Booking booking = bookings.getFirst();
         if (booking != null && booking.getBooker().getId() == userId) {
@@ -162,7 +158,7 @@ public class ItemServiceImpl implements ItemService {
             return commentDto;
         } else if (booking != null && booking.getStatus().equals(BookingStatus.APPROVED)) {
             log.info("Невозможно добавить комментарий, статус бронирования APPROVED");
-            throw new BadRequestParamException("Невозможно добавить комментарий, статус бронирования APPROVED");
+            throw new NotAvailableException("Невозможно добавить комментарий, статус бронирования APPROVED");
         } else {
             throw new InternalServerErrorException("Ошибка сервера при добавлении комментария");
         }

@@ -12,7 +12,6 @@ import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.model.dto.BookingCreateDto;
 import ru.practicum.shareit.booking.model.dto.BookingDto;
 import ru.practicum.shareit.booking.repository.BookingRepository;
-import ru.practicum.shareit.exceptions.BadRequestParamException;
 import ru.practicum.shareit.exceptions.NotAvailableException;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.item.model.Item;
@@ -122,19 +121,6 @@ class BookingServiceImplTest {
         NotAvailableException exception = assertThrows(NotAvailableException.class,
                 () -> bookingService.createBooking(bookingCreateDto, 1L));
         assertTrue(exception.getMessage().contains("недоступен для бронирования"));
-    }
-
-    @Test
-    void createBooking_ShouldThrowBadRequestParamException_WhenStartAfterEnd() {
-        bookingCreateDto.setStart(LocalDateTime.now().plusDays(3));
-        bookingCreateDto.setEnd(LocalDateTime.now().plusDays(1)); // end < start
-
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        when(itemRepository.findById(1L)).thenReturn(Optional.of(item));
-
-        BadRequestParamException exception = assertThrows(BadRequestParamException.class,
-                () -> bookingService.createBooking(bookingCreateDto, 1L));
-        assertTrue(exception.getMessage().contains("Дата начала бронирования не может быть после окончания"));
     }
 
     @Test

@@ -134,7 +134,7 @@ class ItemControllerTest {
                         .param("text", ""))
                 .andExpect(status().isOk());
 
-        verify(itemClient, times(1)).getSearchItems("");
+        verify(itemClient, never()).getSearchItems("");
     }
 
     @Test

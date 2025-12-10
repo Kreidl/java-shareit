@@ -207,8 +207,8 @@ class ItemServiceIntegrationTest {
     }
 
     @Test
-    void deleteItemById_WhenNotOwner_ShouldThrowNotFoundException() {
-        assertThrows(NotFoundException.class,
+    void deleteItemById_WhenNotOwner_ShouldThrowNotAvailableException() {
+        assertThrows(NotAvailableException.class,
                 () -> itemService.deleteItemById(item.getId(), user.getId()));
     }
 
@@ -239,15 +239,15 @@ class ItemServiceIntegrationTest {
     }
 
     @Test
-    void createComment_WhenUserNeverBookedItem_ShouldThrowBadRequestParamException() {
+    void createComment_WhenUserNeverBookedItem_ShouldThrowNotAvailableException() {
         CommentCreateDto dto = new CommentCreateDto("Хочу прокомментировать", 0L, 0L);
 
-        assertThrows(BadRequestParamException.class,
+        assertThrows(NotAvailableException.class,
                 () -> itemService.createComment(dto, item.getId(), user.getId()));
     }
 
     @Test
-    void createComment_WhenBookingNotApproved_ShouldThrowBadRequestParamException() {
+    void createComment_WhenBookingNotApproved_ShouldThrowNotAvailableException() {
         Booking booking = new Booking();
         booking.setStart(LocalDateTime.now().plusDays(2));
         booking.setEnd(LocalDateTime.now().plusDays(3));
@@ -258,7 +258,7 @@ class ItemServiceIntegrationTest {
 
         CommentCreateDto dto = new CommentCreateDto("Почти взял", 0L, 0L);
 
-        assertThrows(BadRequestParamException.class,
+        assertThrows(NotAvailableException.class,
                 () -> itemService.createComment(dto, item.getId(), user.getId()));
     }
 

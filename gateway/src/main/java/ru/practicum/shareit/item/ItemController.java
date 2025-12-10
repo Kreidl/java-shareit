@@ -10,6 +10,11 @@ import ru.practicum.shareit.item.dto.ItemCreateDto;
 import ru.practicum.shareit.item.dto.ItemUpdateDto;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @Slf4j
@@ -49,6 +54,9 @@ public class ItemController {
     @GetMapping("/search")
     public ResponseEntity<Object> getSearchItems(@RequestParam("text") String text) {
         log.info("Получен запрос на поиск предметов с символами {} в названии или описании.", text);
+        if (text.isBlank()) {
+            return ResponseEntity.ok(new ArrayList<>());
+        }
         return itemClient.getSearchItems(text);
     }
 

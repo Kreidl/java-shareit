@@ -99,16 +99,6 @@ class BookingServiceIntegrationTest {
     }
 
     @Test
-    void createBooking_WhenStartAfterEnd_ShouldThrowBadRequestParamException() {
-        LocalDateTime start = LocalDateTime.now().plusHours(2);
-        LocalDateTime end = LocalDateTime.now().plusHours(1);
-        BookingCreateDto dto = new BookingCreateDto(item.getId(), start, end, 0L);
-
-        assertThrows(BadRequestParamException.class,
-                () -> bookingService.createBooking(dto, booker.getId()));
-    }
-
-    @Test
     void itemOwnerBookingSolution_WhenOwnerApproves_ShouldSetApproved() {
         LocalDateTime start = LocalDateTime.now().plusHours(1);
         LocalDateTime end = start.plusHours(2);

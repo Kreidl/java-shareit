@@ -12,7 +12,6 @@ import ru.practicum.shareit.booking.model.dto.BookingCreateDto;
 import ru.practicum.shareit.booking.model.dto.BookingDto;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.repository.BookingRepository;
-import ru.practicum.shareit.exceptions.BadRequestParamException;
 import ru.practicum.shareit.exceptions.InternalServerErrorException;
 import ru.practicum.shareit.exceptions.NotAvailableException;
 import ru.practicum.shareit.exceptions.NotFoundException;
@@ -51,10 +50,6 @@ public class BookingServiceImpl implements BookingService {
                         + " не существует")));
         if (!item.isAvailable()) {
             throw new NotAvailableException("Предмет " + item + "недоступен для бронирования");
-        }
-        if (!bookingCreateDto.isStartBeforeEnd()) {
-            log.error("Дата начала бронирования не может быть после окончания бронирования");
-            throw new BadRequestParamException("Дата начала бронирования не может быть после окончания бронирования");
         }
         Booking booking = mapToBooking(bookingCreateDto, item, user);
         booking.setStatus(BookingStatus.WAITING);

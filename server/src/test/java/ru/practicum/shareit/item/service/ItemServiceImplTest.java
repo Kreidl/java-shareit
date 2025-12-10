@@ -8,7 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
-import ru.practicum.shareit.exceptions.BadRequestParamException;
+import ru.practicum.shareit.exceptions.NotAvailableException;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.item.comment.Comment;
 import ru.practicum.shareit.item.comment.dto.CommentCreateDto;
@@ -231,12 +231,12 @@ class ItemServiceImplTest {
     }
 
     @Test
-    void deleteItemById_ShouldThrowNotFoundException_WhenNotOwner() {
+    void deleteItemById_ShouldThrowNotAvailableException_WhenNotOwner() {
         User anotherUser = new User(2L, "Другой", "other@example.com");
         when(userRepository.findById(2L)).thenReturn(Optional.of(anotherUser));
         when(itemRepository.findById(1L)).thenReturn(Optional.of(item));
 
-        NotFoundException ex = assertThrows(NotFoundException.class,
+        NotAvailableException ex = assertThrows(NotAvailableException.class,
                 () -> itemService.deleteItemById(1L, 2L));
         assertTrue(ex.getMessage().contains("Удалить предмет может только его владелец"));
     }
@@ -262,13 +262,13 @@ class ItemServiceImplTest {
     }
 
     @Test
-    void createComment_ShouldThrowBadRequestParam_WhenNoBooking() {
+    void createComment_ShouldThrowNotAvailableException_WhenNoBooking() {
         when(itemRepository.findById(1L)).thenReturn(Optional.of(item));
         when(userRepository.findById(1L)).thenReturn(Optional.of(owner));
         when(bookingRepository.getLastBookingByBookerIdAndItemId(eq(1L), eq(1L), any(LocalDateTime.class)))
                 .thenReturn(Collections.emptyList());
 
-        BadRequestParamException ex = assertThrows(BadRequestParamException.class,
+        NotAvailableException ex = assertThrows(NotAvailableException.class,
                 () -> itemService.createComment(commentCreateDto, 1L, 1L));
         assertTrue(ex.getMessage().contains("не брал в аренду предмет с id=1"));
     }
