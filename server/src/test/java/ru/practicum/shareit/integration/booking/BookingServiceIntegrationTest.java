@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Transactional
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-class BookingServiceImplIntegrationTest {
+class BookingServiceIntegrationTest {
 
     @Autowired
     private BookingService bookingService;
